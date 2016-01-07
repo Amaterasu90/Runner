@@ -3,14 +3,13 @@
 #include "Runner.h"
 #include "OrbitalActor.h"
 
-
 // Sets default values
 AOrbitalActor::AOrbitalActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
 	SetMobility(EComponentMobility::Movable);
-	GetStaticMeshComponent()->SetStaticMesh(mesh);
 }
 
 // Called when the game starts or when spawned

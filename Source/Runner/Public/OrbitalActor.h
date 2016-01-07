@@ -17,14 +17,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Rotation")
 	float Beta;
 	UPROPERTY(EditAnywhere, Category = "Rotation")
-	float Gamma = 90.0f;
+	float Gamma = 45.0f;
 	UPROPERTY(EditAnywhere, Category = "Rotation")
 	float Radius = 20.0f;
 	UPROPERTY(EditAnywhere, Category = "Rotation")
 	float SpeedFactor = 250.0f;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "View")
-	UStaticMesh * mesh;
-	UStaticMeshComponent * staticMeshComponent;
 
 
 	// Sets default values for this actor's properties
