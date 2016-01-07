@@ -12,5 +12,15 @@
 				"Engine"
 			]
 		}
+	],
+	"Plugins": [
+		{
+			"Name": "LiveEditor",
+			"Enabled": true
+		},
+		{
+			"Name": "LiveEditorListenServer",
+			"Enabled": true
+		}
 	]
 }
