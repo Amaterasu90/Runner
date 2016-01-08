@@ -33,18 +33,15 @@ void ACameraDirector::Tick( float DeltaTime )
 
 		//Find the actor that handles control for the local player.
 		APlayerController* OurPlayerController = UGameplayStatics::GetPlayerController(this, 0);
-		if (OurPlayerController)
-		{
-			if ((OurPlayerController->GetViewTarget() != CameraOne) && CameraOne)
-			{
-				//Cut instantly to camera one.
-				OurPlayerController->SetViewTarget(CameraOne);
+		if (OurPlayerController) {
+			CurrentCamera = Cameras[CurrentCameraIndex];
+			if (CurrentCamera) {
+				OurPlayerController->SetViewTargetWithBlend(CurrentCamera, SmoothBlendTime);
 			}
-			else if ((OurPlayerController->GetViewTarget() != CameraTwo) && CameraTwo)
-			{
-				//Blend smoothly to camera two.
-				OurPlayerController->SetViewTargetWithBlend(CameraTwo, SmoothBlendTime);
-			}
+			if (CurrentCameraIndex < Cameras.Num() - 1)
+				CurrentCameraIndex++;
+			else
+				CurrentCameraIndex = 0;
 		}
 	}
 }
