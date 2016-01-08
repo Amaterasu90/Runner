@@ -31,16 +31,6 @@ void ACustomPawn::BeginPlay()
 // Called every frame
 void ACustomPawn::Tick( float DeltaTime )
 {
-	float CurrentScale = OurVisibleComponent->GetComponentScale().X;
-	if (bGrowing) {
-		CurrentScale += DeltaTime;
-	}
-	else {
-		CurrentScale -= DeltaTime;
-	}
-
-	CurrentScale = FMath::Clamp(CurrentScale, 1.0f, 2.0f);
-	OurVisibleComponent->SetWorldScale3D(FVector(CurrentScale));
 
 	if (!CurrentVelocity.IsZero()) {
 		FVector NewLocation = GetActorLocation() + (CurrentVelocity * DeltaTime);
@@ -59,6 +49,8 @@ void ACustomPawn::SetupPlayerInputComponent(class UInputComponent* InputComponen
 	InputComponent->BindAxis("MoveX", this, &ACustomPawn::Move_XAxis);
 	InputComponent->BindAxis("MoveY", this, &ACustomPawn::Move_YAxis);
 
+	InputComponent->BindAxis("ScaleX", this, &ACustomPawn::Scale_X);
+
 	Super::SetupPlayerInputComponent(InputComponent);
 }
 
@@ -76,6 +68,19 @@ void ACustomPawn::Move_YAxis(float AxisValue){
 	else
 		Acceleration.Y = 1.0f;
 	CurrentVelocity.Y = FMath::Clamp(AxisValue, -1.0f, 1.0f) * Acceleration.Y;
+}
+
+void ACustomPawn::Scale_X(float AxisValue) {
+	float CurrentScale = OurVisibleComponent->GetComponentScale().X;
+	if (bGrowing) {
+		CurrentScale += AxisValue;
+	}
+	else {
+		CurrentScale -= AxisValue;
+	}
+
+	CurrentScale = FMath::Clamp(CurrentScale, 1.0f, 2.0f);
+	OurVisibleComponent->SetWorldScale3D(FVector(CurrentScale));
 }
 
 void ACustomPawn::StartGrowing() {

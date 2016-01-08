@@ -29,6 +29,7 @@ public:
 
 	void Move_XAxis(float AxisValue);
 	void Move_YAxis(float AxisValue);
+	void Scale_X(float AxisValue);
 	void StartGrowing();
 	void StopGrowing();
 
