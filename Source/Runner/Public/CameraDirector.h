@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "FBlendCamera.h"
 #include "CameraDirector.generated.h"
 
 UCLASS()
@@ -19,11 +20,12 @@ public:
 	
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
-
+private:
 	UPROPERTY(EditAnywhere)
-	TArray<AActor*> Cameras;
-	int CurrentCameraIndex;
+	TArray<FBlendCamera> Cameras;
+
 	AActor* CurrentCamera;
+	int CurrentCameraIndex;
 
 	float TimeToNextCameraChange;
 };

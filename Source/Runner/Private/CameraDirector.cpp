@@ -17,26 +17,23 @@ ACameraDirector::ACameraDirector()
 void ACameraDirector::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void ACameraDirector::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
-	const float TimeBetweenCameraChanges = 2.0f;
-	const float SmoothBlendTime = 0.75f;
 	TimeToNextCameraChange -= DeltaTime;
 	if (TimeToNextCameraChange <= 0.0f)
 	{
-		TimeToNextCameraChange += TimeBetweenCameraChanges;
+		TimeToNextCameraChange += FBlendCamera::TimeBetweenCameraChanges;
 
 		//Find the actor that handles control for the local player.
 		APlayerController* OurPlayerController = UGameplayStatics::GetPlayerController(this, 0);
 		if (OurPlayerController) {
-			CurrentCamera = Cameras[CurrentCameraIndex];
+			CurrentCamera = Cameras[CurrentCameraIndex].Camera;
 			if (CurrentCamera) {
-				OurPlayerController->SetViewTargetWithBlend(CurrentCamera, SmoothBlendTime);
+				OurPlayerController->SetViewTargetWithBlend(CurrentCamera, FBlendCamera::SmoothBlendTime);
 			}
 			if (CurrentCameraIndex < Cameras.Num() - 1)
 				CurrentCameraIndex++;
