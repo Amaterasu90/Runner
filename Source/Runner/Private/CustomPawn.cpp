@@ -63,11 +63,19 @@ void ACustomPawn::SetupPlayerInputComponent(class UInputComponent* InputComponen
 }
 
 void ACustomPawn::Move_XAxis(float AxisValue){
-	CurrentVelocity.X = FMath::Clamp(AxisValue, -1.0f, 1.0f) * 100.0f;
+	if (!AxisValue == 0.0f)
+		Acceleration.X += 10.0f;
+	else
+		Acceleration.X = 1.0f;
+	CurrentVelocity.X = FMath::Clamp(AxisValue, -1.0f, 1.0f) * Acceleration.X;
 }
 
 void ACustomPawn::Move_YAxis(float AxisValue){
-	CurrentVelocity.Y = FMath::Clamp(AxisValue, -1.0f, 1.0f) * 100.0f;
+	if (!AxisValue == 0.0f)
+		Acceleration.Y += 10.0f;
+	else
+		Acceleration.Y = 1.0f;
+	CurrentVelocity.Y = FMath::Clamp(AxisValue, -1.0f, 1.0f) * Acceleration.Y;
 }
 
 void ACustomPawn::StartGrowing() {
