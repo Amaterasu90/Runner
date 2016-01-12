@@ -47,7 +47,7 @@ void ATimeKeeper::AdvanceTimer() {
 	}
 }
 
-void ATimeKeeper::CountdownHasFinished(){
+void ATimeKeeper::CountdownHasFinished_Implementation(){
 	CountdownText->SetText(FText::FromString("GO!"));
 }
 

@@ -22,6 +22,7 @@ public:
 
 	void UpdateTimerDisplay();
 
+	UFUNCTION(BlueprintNativeEvent)
 	void CountdownHasFinished();
 
 	void AdvanceTimer();
