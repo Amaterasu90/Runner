@@ -12,7 +12,7 @@ ATransformationKeeper::ATransformationKeeper() {
 	CountdownText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("CountdownNumber"));
 	CountdownText->SetHorizontalAlignment(EHTA_Center);
 	CountdownText->SetWorldSize(150.0f);
-	CountdownText->SetText(TEXT("Timer"));
+	CountdownText->SetText(FText::FromString("Timer"));
 	CountdownText->bCastDynamicShadow = true;
 	CountdownText->CastShadow = true;
 	RootComponent = CountdownText;
@@ -42,8 +42,8 @@ void ATransformationKeeper::FinishCoundown_Implementation() {
 }
 
 void ATransformationKeeper::UpdateDisplay() {
-	float time = CountdownTimeCounter - (float)FMath::Floor(CountdownTimeCounter);
-	float result = FMath::Floor(CountdownTimeCounter) + FMath::Floor(time*10.0f)/10.0f ;
+	float time = CountdownTimeCounter - (float)FMath::FloorToInt(CountdownTimeCounter);
+	float result = FMath::FloorToInt(CountdownTimeCounter) + FMath::FloorToInt(time*10.0f)/10.0f ;
 	if(result > 0.0f)
 		message = FText::FromString(FString::SanitizeFloat(FMath::Max(result, 0.0f)));
 	CountdownText->SetText(message);
