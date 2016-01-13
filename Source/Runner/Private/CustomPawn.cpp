@@ -55,7 +55,7 @@ void ACustomPawn::SetupPlayerInputComponent(class UInputComponent* InputComponen
 }
 
 void ACustomPawn::Move_XAxis(float AxisValue){
-	if (!AxisValue == 0.0f)
+	if (AxisValue == 0.0f)
 		Acceleration.X += 10.0f;
 	else
 		Acceleration.X = 1.0f;
@@ -63,7 +63,7 @@ void ACustomPawn::Move_XAxis(float AxisValue){
 }
 
 void ACustomPawn::Move_YAxis(float AxisValue){
-	if (!AxisValue == 0.0f)
+	if (AxisValue == 0.0f)
 		Acceleration.Y += 10.0f;
 	else
 		Acceleration.Y = 1.0f;
