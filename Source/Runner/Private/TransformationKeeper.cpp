@@ -16,41 +16,44 @@ ATransformationKeeper::ATransformationKeeper() {
 	CountdownText->bCastDynamicShadow = true;
 	CountdownText->CastShadow = true;
 	RootComponent = CountdownText;
-
+	CountdownTimeCounter = CountdownTime;
 }
 
 
 void ATransformationKeeper::TimerDelegate() {
-
-	CountdownTime -= DeltaTime;
+	if(CountdownTimeCounter > 0)
+		CountdownTimeCounter -= DeltaTime;
 	UpdateDisplay();
-	UpdateLocation();
-	if (CountdownTime < DeltaTime) {
+	if (CountdownTimeCounter < DeltaTime) {
+		GetWorldTimerManager().ClearTimer(CountdownTimerHandle);
+		GetWorldTimerManager().SetTimer(CountdownTimerHandle, this, &ATransformationKeeper::LocationDelegate, DeltaTime, true);
 		FinishCoundown();
+		StartTransformation();
 	}
 }
 
+void ATransformationKeeper::LocationDelegate() {
+	UpdateDisplay();
+	UpdateLocation();
+}
+
 void ATransformationKeeper::FinishCoundown_Implementation() {
-	if(!bEventWasCalled)
-		message = FText::FromString("Finish Counting!");
-	bEventWasCalled = true;
+	message = FText::FromString("Finish Counting!");
 }
 
 void ATransformationKeeper::UpdateDisplay() {
-	float time = CountdownTime - (float)FMath::Floor(CountdownTime);
-	float result = FMath::Floor(CountdownTime) + FMath::Floor(time*10.0f)/10.0f ;
+	float time = CountdownTimeCounter - (float)FMath::Floor(CountdownTimeCounter);
+	float result = FMath::Floor(CountdownTimeCounter) + FMath::Floor(time*10.0f)/10.0f ;
 	if(result > 0.0f)
 		message = FText::FromString(FString::SanitizeFloat(FMath::Max(result, 0.0f)));
 	CountdownText->SetText(message);
 }
 
 void ATransformationKeeper::StartTransformation_Implementation() {
-	if(bEventWasCalled)
 		message = FText::FromString("Increment sequence!");
 }
 
 void ATransformationKeeper::StopTransformation_Implementation() {
-	if (bEventWasCalled)
 		message = FText::FromString("Decrement sequence!");
 }
 

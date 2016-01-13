@@ -32,7 +32,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	float DeltaTime = 0.1f;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	AActor* actor;
 
 	FTimerHandle CountdownTimerHandle;
@@ -41,6 +41,7 @@ public:
 	float factor = 1.0f;
 	FVector OldLocation;
 	FText message;
+	float CountdownTimeCounter;
 	
 	void UpdateLocation();
 	void UpdateDisplay();
@@ -53,6 +54,8 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void FinishCoundown();
+
+	void LocationDelegate();
 
 	void TimerDelegate();
 };
