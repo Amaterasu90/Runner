@@ -76,13 +76,16 @@ void APawnWithCamera::MakeStep(float DeltaTime) {
 }
 
 // Called every frame
-void APawnWithCamera::Tick( float DeltaTime )
+void APawnWithCamera::Tick(float DeltaTime)
 {
-	if (ElapsedTime + DeltaTime > 2.0f)
-		ElapsedTime = 0.0f;
-	else
-		ElapsedTime += DeltaTime;
-	RandomInput = FVector2D(Curve->GetVectorValue(ElapsedTime).X, Curve->GetVectorValue(ElapsedTime).Y);
+	if (CameraInput.IsZero())
+	{
+		if (ElapsedTime + DeltaTime > 2.0f)
+			ElapsedTime = 0.0f;
+		else
+			ElapsedTime += DeltaTime;
+		RandomInput = FVector2D(Curve->GetVectorValue(ElapsedTime).X, Curve->GetVectorValue(ElapsedTime).Y);
+	}
 	ZoomUpdate(DeltaTime);
 	YawUpdate();
 	PitchUpdate();
