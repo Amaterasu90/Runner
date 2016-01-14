@@ -40,13 +40,15 @@ void APawnWithCamera::ZoomUpdate(float DeltaTime) {
 
 void APawnWithCamera::YawUpdate() {
 	FRotator NewRotation = GetActorRotation();
-	NewRotation.Yaw += CameraInput.X;
+	ActorRotationStep = FMath::Clamp<float>(ActorRotationStep + CameraInput.X * DelayActorRotationFactor , -100.0f, 100.0f);
+	NewRotation.Yaw += ActorRotationStep;
 	SetActorRotation(NewRotation);
 }
 
 void APawnWithCamera::PitchUpdate() {
 	FRotator NewRotation = CameraSpringArm->GetComponentRotation();
-	NewRotation.Pitch = FMath::Clamp(NewRotation.Pitch + CameraInput.Y, -80.0f, -15.0f);
+	SpringMoveStep = FMath::Clamp<float>(SpringMoveStep + CameraInput.Y * DelaySpringFactor, -1.0f, 1.0f);
+	NewRotation.Pitch = FMath::Clamp<float>(NewRotation.Pitch + SpringMoveStep, -80.0f, -15.0f);
 	CameraSpringArm->SetWorldRotation(NewRotation);
 }
 
@@ -130,7 +132,5 @@ void APawnWithCamera::SprintOff() {
 }
 
 void APawnWithCamera::Zoom(float AxisValue) {
-	if(!bZoomingIn)
-		ZoomFactor += FMath::Clamp<float>(AxisValue, -0.1f, 0.1f);
 }
 

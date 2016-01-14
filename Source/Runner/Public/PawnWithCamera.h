@@ -38,12 +38,18 @@ protected:
 	USpringArmComponent* CameraSpringArm;
 	UPROPERTY(EditAnywhere)
 	float SprintSpeedFactor = 10.0f;
+	UPROPERTY(EditAnywhere)
+	float DelaySpringFactor = 0.025f;
+	UPROPERTY(EditAnywhere)
+	float DelayActorRotationFactor = 0.025f;
 	UCameraComponent* OurCamera;
 
 private:
 	FVector2D MovementInput;
 	FVector2D CameraInput;
 	float ZoomFactor;
+	float SpringMoveStep;
+	float ActorRotationStep;
 	bool bZoomingIn;
 	bool bSprintOn;
 
