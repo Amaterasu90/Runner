@@ -30,41 +30,59 @@ void APawnWithCamera::BeginPlay()
 	
 }
 
+void APawnWithCamera::ZoomUpdate(float DeltaTime) {
+	if (bZoomingIn) {
+		ZoomFactor += DeltaTime / 0.5f;
+	}
+	else {
+		ZoomFactor -= DeltaTime / 0.25f;
+	}
+
+	ZoomFactor = FMath::Clamp<float>(ZoomFactor, 0.0f, 1.0f);
+	OurCamera->FieldOfView = FMath::Lerp<float>(90.0f, 60.0f, ZoomFactor);
+	CameraSpringArm->TargetArmLength = FMath::Lerp<float>(400.0f, 300.0f, ZoomFactor);
+}
+
+void APawnWithCamera::YawUpdate() {
+	FRotator NewRotation = GetActorRotation();
+	NewRotation.Yaw += CameraInput.X;
+	SetActorRotation(NewRotation);
+}
+
+void APawnWithCamera::PitchUpdate() {
+	FRotator NewRotation = CameraSpringArm->GetComponentRotation();
+	NewRotation.Pitch = FMath::Clamp(NewRotation.Pitch + CameraInput.Y, -80.0f, -15.0f);
+	CameraSpringArm->SetWorldRotation(NewRotation);
+}
+
+void APawnWithCamera::MoveUpdate(float DeltaTime) {
+	if (!MovementInput.IsZero()) {
+		if (bSprintOn)
+			MakeSprintStep(SprintSpeedFactor,DeltaTime);
+		else 
+			MakeStep(DeltaTime);
+	}
+}
+
+void APawnWithCamera::MakeSprintStep(float sprintFactor, float DeltaTime){
+	MovementInput = MovementInput.GetSafeNormal() * 100.0f;
+	FVector NewLocation = GetActorLocation();
+	NewLocation += GetActorForwardVector() * sprintFactor * MovementInput.X * DeltaTime;
+	NewLocation += GetActorRightVector() * sprintFactor * MovementInput.Y * DeltaTime;
+	SetActorLocation(NewLocation);
+}
+
+void APawnWithCamera::MakeStep(float DeltaTime) {
+	MakeSprintStep(1.0f, DeltaTime);
+}
+
 // Called every frame
 void APawnWithCamera::Tick( float DeltaTime )
 {
-	{
-		if (bZoomingIn) {
-			ZoomFactor += DeltaTime / 0.5f;
-		}
-		else {
-			ZoomFactor -= DeltaTime / 0.25f;
-		}
-
-		ZoomFactor = FMath::Clamp<float>(ZoomFactor, 0.0f, 1.0f);
-		OurCamera->FieldOfView = FMath::Lerp<float>(90.0f, 60.0f, ZoomFactor);
-		CameraSpringArm->TargetArmLength = FMath::Lerp<float>(400.0f, 300.0f, ZoomFactor);
-	}
-	{
-		FRotator NewRotation = GetActorRotation();
-		NewRotation.Yaw += CameraInput.X;
-		SetActorRotation(NewRotation);
-	}
-	{
-		FRotator NewRotation = CameraSpringArm->GetComponentRotation();
-		NewRotation.Pitch = FMath::Clamp(NewRotation.Pitch + CameraInput.Y, -80.0f, -15.0f);
-		CameraSpringArm->SetWorldRotation(NewRotation);
-	}
-	{
-		if (!MovementInput.IsZero()) {
-			MovementInput = MovementInput.GetSafeNormal() * 100.0f;
-			FVector NewLocation = GetActorLocation();
-			NewLocation += GetActorForwardVector() * MovementInput.X * DeltaTime;
-			NewLocation += GetActorRightVector() * MovementInput.Y * DeltaTime;
-			SetActorLocation(NewLocation);
-		}
-	}
-
+	ZoomUpdate(DeltaTime);
+	YawUpdate();
+	PitchUpdate();
+	MoveUpdate(DeltaTime);
 	Super::Tick(DeltaTime);
 }
 
@@ -77,6 +95,9 @@ void APawnWithCamera::SetupPlayerInputComponent(class UInputComponent* InputComp
 	InputComponent->BindAxis("Move Right", this, &APawnWithCamera::MoveRight);
 	InputComponent->BindAxis("Camera Pitch", this, &APawnWithCamera::PitchCamera);
 	InputComponent->BindAxis("Camera Yaw", this, &APawnWithCamera::YawCamera);
+	InputComponent->BindAction("Sprint On", IE_Pressed, this, &APawnWithCamera::SprintOn);
+	InputComponent->BindAction("Sprint Off", IE_Released, this, &APawnWithCamera::SprintOff);
+
 
 	Super::SetupPlayerInputComponent(InputComponent);
 }
@@ -103,5 +124,13 @@ void APawnWithCamera::ZoomIn() {
 
 void APawnWithCamera::ZoomOut() {
 	bZoomingIn = false;
+}
+
+void APawnWithCamera::SprintOn() {
+	bSprintOn = true;
+}
+
+void APawnWithCamera::SprintOff() {
+	bSprintOn = false;
 }
 

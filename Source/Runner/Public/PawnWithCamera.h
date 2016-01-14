@@ -29,10 +29,14 @@ public:
 	void YawCamera(float AxisValue);
 	void ZoomIn();
 	void ZoomOut();
+	void SprintOn();
+	void SprintOff();
 
 protected:
 	UPROPERTY(EditAnywhere)
 	USpringArmComponent* CameraSpringArm;
+	UPROPERTY(EditAnywhere)
+	float SprintSpeedFactor = 10.0f;
 	UCameraComponent* OurCamera;
 
 private:
@@ -40,4 +44,13 @@ private:
 	FVector2D CameraInput;
 	float ZoomFactor;
 	bool bZoomingIn;
+	bool bSprintOn;
+
+	void ZoomUpdate(float DeltaTime);
+	void YawUpdate();
+	void PitchUpdate();
+	void MoveUpdate(float DeltaTime);
+	void MakeStep(float DeltaTime);
+	void MakeSprintStep(float sprintFactor, float DeltaTime);
+
 };
