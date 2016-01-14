@@ -27,6 +27,7 @@ public:
 	void MoveRight(float AxisValue);
 	void PitchCamera(float AxisValue);
 	void YawCamera(float AxisValue);
+	void Zoom(float AxisValue);
 	void ZoomIn();
 	void ZoomOut();
 	void SprintOn();

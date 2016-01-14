@@ -24,18 +24,13 @@ APawnWithCamera::APawnWithCamera()
 }
 
 // Called when the game starts or when spawned
-void APawnWithCamera::BeginPlay()
-{
+void APawnWithCamera::BeginPlay() {
 	Super::BeginPlay();
-	
 }
 
 void APawnWithCamera::ZoomUpdate(float DeltaTime) {
 	if (bZoomingIn) {
 		ZoomFactor += DeltaTime / 0.5f;
-	}
-	else {
-		ZoomFactor -= DeltaTime / 0.25f;
 	}
 
 	ZoomFactor = FMath::Clamp<float>(ZoomFactor, 0.0f, 1.0f);
@@ -97,7 +92,7 @@ void APawnWithCamera::SetupPlayerInputComponent(class UInputComponent* InputComp
 	InputComponent->BindAxis("Camera Yaw", this, &APawnWithCamera::YawCamera);
 	InputComponent->BindAction("Sprint On", IE_Pressed, this, &APawnWithCamera::SprintOn);
 	InputComponent->BindAction("Sprint Off", IE_Released, this, &APawnWithCamera::SprintOff);
-
+	InputComponent->BindAxis("Zoom", this, &APawnWithCamera::Zoom);
 
 	Super::SetupPlayerInputComponent(InputComponent);
 }
@@ -132,5 +127,10 @@ void APawnWithCamera::SprintOn() {
 
 void APawnWithCamera::SprintOff() {
 	bSprintOn = false;
+}
+
+void APawnWithCamera::Zoom(float AxisValue) {
+	if(!bZoomingIn)
+		ZoomFactor += FMath::Clamp<float>(AxisValue, -0.1f, 0.1f);
 }
 
