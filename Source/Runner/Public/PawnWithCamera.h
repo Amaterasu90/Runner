@@ -42,11 +42,15 @@ protected:
 	float DelaySpringFactor = 0.025f;
 	UPROPERTY(EditAnywhere)
 	float DelayActorRotationFactor = 0.025f;
+	UPROPERTY(EditAnywhere)
+	UCurveVector* Curve;
 	UCameraComponent* OurCamera;
 
 private:
 	FVector2D MovementInput;
 	FVector2D CameraInput;
+	FVector2D RandomInput;
+	float ElapsedTime;
 	float ZoomFactor;
 	float SpringMoveStep;
 	float ActorRotationStep;

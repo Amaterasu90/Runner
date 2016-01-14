@@ -41,7 +41,7 @@ void APawnWithCamera::ZoomUpdate(float DeltaTime) {
 void APawnWithCamera::YawUpdate() {
 	FRotator NewRotation = GetActorRotation();
 	ActorRotationStep = FMath::Clamp<float>(ActorRotationStep + CameraInput.X * DelayActorRotationFactor , -100.0f, 100.0f);
-	NewRotation.Yaw += ActorRotationStep;
+	NewRotation.Yaw += ActorRotationStep ;
 	SetActorRotation(NewRotation);
 }
 
@@ -49,6 +49,8 @@ void APawnWithCamera::PitchUpdate() {
 	FRotator NewRotation = CameraSpringArm->GetComponentRotation();
 	SpringMoveStep = FMath::Clamp<float>(SpringMoveStep + CameraInput.Y * DelaySpringFactor, -1.0f, 1.0f);
 	NewRotation.Pitch = FMath::Clamp<float>(NewRotation.Pitch + SpringMoveStep, -80.0f, -15.0f);
+	NewRotation.Pitch += RandomInput.X * 0.25f;
+	NewRotation.Yaw += RandomInput.Y * 0.25f;
 	CameraSpringArm->SetWorldRotation(NewRotation);
 }
 
@@ -76,6 +78,11 @@ void APawnWithCamera::MakeStep(float DeltaTime) {
 // Called every frame
 void APawnWithCamera::Tick( float DeltaTime )
 {
+	if (ElapsedTime + DeltaTime > 2.0f)
+		ElapsedTime = 0.0f;
+	else
+		ElapsedTime += DeltaTime;
+	RandomInput = FVector2D(Curve->GetVectorValue(ElapsedTime).X, Curve->GetVectorValue(ElapsedTime).Y);
 	ZoomUpdate(DeltaTime);
 	YawUpdate();
 	PitchUpdate();
