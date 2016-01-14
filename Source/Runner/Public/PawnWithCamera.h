@@ -23,9 +23,21 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
+	void MoveForward(float AxisValue);
+	void MoveRight(float AxisValue);
+	void PitchCamera(float AxisValue);
+	void YawCamera(float AxisValue);
+	void ZoomIn();
+	void ZoomOut();
+
 protected:
 	UPROPERTY(EditAnywhere)
 	USpringArmComponent* CameraSpringArm;
 	UCameraComponent* OurCamera;
-	
+
+private:
+	FVector2D MovementInput;
+	FVector2D CameraInput;
+	float ZoomFactor;
+	bool bZoomingIn;
 };
