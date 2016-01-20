@@ -9,6 +9,13 @@ AOrbitalActor::AOrbitalActor()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	TArray<UStaticMeshComponent* > Components;
+	GetComponents<UStaticMeshComponent>(Components);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SphereVisualAsset(TEXT("/Game/StarterContent/Shapes/Shape_Sphere.Shape_Sphere"));
+	if (SphereVisualAsset.Succeeded()) {
+		Components[0]->SetStaticMesh(SphereVisualAsset.Object);
+	}
+	
 	SetMobility(EComponentMobility::Movable);
 }
 

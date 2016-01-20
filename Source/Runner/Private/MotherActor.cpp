@@ -2,13 +2,14 @@
 
 #include "Runner.h"
 #include "SpawnMovementComponent.h"
+#include "OrbitalActor.h"
 #include "MotherActor.h"
 
 
 // Sets default values
 AMotherActor::AMotherActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	UBoxComponent* Box = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
 	RootComponent = Box;
@@ -33,21 +34,22 @@ AMotherActor::AMotherActor()
 	SphereVisual->AttachTo(RootComponent);
 	SphereComponent->AttachTo(RootComponent);
 
-	USpawnMovementComponent* spawn = CreateDefaultSubobject<USpawnMovementComponent>(TEXT("Spawner"));
-	spawn->UpdatedComponent = RootComponent;
+	UChildActorComponent * ChildActor = CreateDefaultSubobject<UChildActorComponent>(TEXT("InventoryCamera"));
+	ChildActor->SetChildActorClass(AOrbitalActor::StaticClass());
+	ChildActor->CreateChildActor();
+	FVector position = GetActorLocation();
+	ChildActor->SetRelativeTransform(FTransform(position));
+
 }
 
 // Called when the game starts or when spawned
 void AMotherActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
-void AMotherActor::Tick( float DeltaTime )
-{
+void AMotherActor::Tick( float DeltaTime ){
 	Super::Tick( DeltaTime );
-
 }
 
