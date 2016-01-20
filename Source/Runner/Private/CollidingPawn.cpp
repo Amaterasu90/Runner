@@ -3,6 +3,7 @@
 #include "Runner.h"
 #include "CollidingPawn.h"
 #include "OrbitalPawnMovementComponent.h"
+#include "SpawnMovementComponent.h"
 #include "SpinMovementComponent.h"
 #include "OrbitalActor.h"
 
@@ -74,6 +75,9 @@ ACollidingPawn::ACollidingPawn()
 
 	USpinMovementComponent* Actor1 = CreateDefaultSubobject<USpinMovementComponent>(TEXT("SpinMovementComponent"));
 	Actor1->UpdatedComponent = OrbitalSphere;
+
+	USpawnMovementComponent* a = CreateDefaultSubobject<USpawnMovementComponent>(TEXT("FOO"));
+	a->UpdatedComponent = SphereComponent;
 }
 
 // Called when the game starts or when spawned
